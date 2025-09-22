@@ -1,0 +1,61 @@
+### BFF Mobile Login API - Ejemplos de uso
+
+### Variables
+@baseUrl = http://localhost:3000
+@cuit = 20123456789
+@email = comercio@example.com
+@password = MiPassword123!
+
+### 1. Crear Suscripción
+POST {{baseUrl}}/v1/private/subscriptions
+Content-Type: application/json
+
+{
+  "cuit": "{{cuit}}"
+}
+
+### 2. Validar Suscripción (con OTP recibido por email)
+PUT {{baseUrl}}/v1/private/subscriptions/{{cuit}}
+Content-Type: application/json
+
+{
+  "otp": "123456"
+}
+
+### 3. Reenviar Challenge OTP
+PATCH {{baseUrl}}/v1/private/subscriptions/{{cuit}}
+
+### 4. Crear Cuenta (usando la key de la suscripción validada)
+POST {{baseUrl}}/v1/private/accounts
+Content-Type: application/json
+
+{
+  "cuit": "{{cuit}}",
+  "email": "{{email}}",
+  "password": "{{password}}",
+  "firstName": "Juan",
+  "lastName": "Pérez",
+  "key": "123e4567-e89b-12d3-a456-426614174000"
+}
+
+### 5. Login
+POST {{baseUrl}}/v1/private/login
+Content-Type: application/json
+
+{
+  "email": "{{email}}",
+  "password": "{{password}}"
+}
+
+### 6. Login con Refresh Token
+POST {{baseUrl}}/v1/private/login
+Content-Type: application/json
+
+{
+  "email": "{{email}}",
+  "password": "{{password}}",
+  "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+}
+
+### 7. Ver documentación Swagger
+GET {{baseUrl}}/api
