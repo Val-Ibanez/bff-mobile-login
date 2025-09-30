@@ -18,6 +18,12 @@ async function bootstrap() {
     .setTitle('BFF Mobile Login API')
     .setDescription('Backend for Frontend API for mobile login services')
     .setVersion('1.0')
+    // Añadir soporte para autenticación Bearer (JWT) en Swagger UI
+    .addBearerAuth({
+      type: 'http',
+      scheme: 'bearer',
+      bearerFormat: 'JWT',
+    }, 'JWT-auth')
     .addTag('auth', 'Authentication endpoints')
     .addTag('subscription', 'Subscription management endpoints')
     .build();
@@ -33,8 +39,8 @@ async function bootstrap() {
   });
 
   const port = process.env.PORT || 3000;
-  await app.listen(port);
-  console.log(`🚀 BFF Mobile Login API running on port ${port}`);
+  await app.listen(port, '0.0.0.0');
+  console.log(`🚀 BFF Mobile Login API running on 0.0.0.0:${port}`);
   console.log(`📚 Swagger documentation available at http://localhost:${port}/api`);
 }
 
