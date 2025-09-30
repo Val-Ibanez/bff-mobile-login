@@ -40,14 +40,14 @@ export class AuthController {
   }
 
   @Post('login')
-  @HttpCode(HttpStatus.CREATED)
+  @HttpCode(HttpStatus.OK)
   @ApiOperation({ 
     summary: 'Autenticación de comercio',
     description: 'Autentica un comercio y retorna tokens de acceso'
   })
   @ApiBody({ type: AuthenticationRequestDto })
   @ApiResponse({ 
-    status: 201, 
+    status: 200, 
     description: 'Autenticación exitosa',
     type: AuthenticationResponseDto
   })
@@ -62,9 +62,18 @@ export class AuthController {
   async login(@Body() request: AuthenticationRequestDto): Promise<AuthenticationResponseDto> {
     this.logger.log(`Iniciando proceso de autenticación para el request: ${JSON.stringify({ email: request.email })}`);
     
-    const response = await this.authService.login(request);
+    // Respuesta mockeada para pruebas de frontend
+    // const mockResponse: AuthenticationResponseDto = {
+    //   accessToken: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c',
+    //   refreshToken: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.7eMe1dyoNm_S0Zh8n-dqRbkWgFKkKerem9iEJHFSqaY',
+    //   tokenType: 'Bearer',
+    //   expiresIn: 3600,
+    //   refreshExpiresIn: 86400
+    // };
     
-    this.logger.log(`Finaliza exitosamente el proceso de autenticación para el email: ${request.email}`);
+    this.logger.log(`[MOCK] Login exitoso para: ${request.email}`);
+    //return mockResponse;
+    const response = await this.authService.login(request);
     return response;
   }
 }

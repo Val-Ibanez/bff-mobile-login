@@ -55,6 +55,9 @@ PORT=3000
 MERCHANTS_SERVICE_HOST=http://localhost:1080/api/merchants
 CLIENTS_SERVICE_HOST=http://localhost:8082/v1
 SECURITY_SERVICE_HOST=http://localhost:8087/v1
+
+# Si el servicio de seguridad expone endpoints privados bajo /v1/private
+SECURITY_SERVICE_HOST_PRIVATE=http://localhost:8087/v1/private
 ```
 
 ## Documentación
