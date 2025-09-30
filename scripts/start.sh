@@ -23,3 +23,4 @@ npm run build
 # Iniciar el servidor
 echo "🌟 Iniciando servidor..."
 npm run start:prod
+

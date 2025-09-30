@@ -1,7 +1,9 @@
 import { NestFactory } from '@nestjs/core';
-import { ValidationPipe } from '@nestjs/common';
+import { ValidationPipe, Logger } from '@nestjs/common';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { AppModule } from './app.module';
+import helmet from 'helmet';
+import rateLimit from 'express-rate-limit';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -31,6 +33,18 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);
 
+  // Configuración de seguridad
+  app.use(helmet());
+  
+  // Rate limiting
+  app.use(
+    rateLimit({
+      windowMs: 15 * 60 * 1000, // 15 minutos
+      max: 100, // límite de 100 peticiones por windowMs
+      message: 'Demasiadas peticiones desde esta IP, por favor intente nuevamente en 15 minutos'
+    })
+  );
+
   // Enable CORS for mobile apps
   app.enableCors({
     origin: true,
@@ -45,3 +59,4 @@ async function bootstrap() {
 }
 
 bootstrap();
+

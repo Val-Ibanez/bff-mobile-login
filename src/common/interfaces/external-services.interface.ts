@@ -29,3 +29,4 @@ export interface ExternalServiceConfig {
   host: string;
   timeout?: number;
 }
+

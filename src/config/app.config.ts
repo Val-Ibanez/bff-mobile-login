@@ -30,3 +30,4 @@ export const appConfig = (): AppConfig => ({
     timeout: parseInt(process.env.SECURITY_SERVICE_TIMEOUT, 10) || 10000,
   },
 });
+
