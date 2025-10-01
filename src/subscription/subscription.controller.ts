@@ -38,6 +38,10 @@ export class SubscriptionController {
     status: 400, 
     description: 'Datos de entrada inválidos'
   })
+  @ApiResponse({ 
+    status: 429, 
+    description: 'Demasiadas operaciones de suscripción. Rate limit excedido.'
+  })
   async createSubscription(@Body() request: CreateSubscriptionRequestDto): Promise<CreateSubscriptionResponseDto> {
     this.logger.log(`Generando suscripción para el cliente: ${JSON.stringify(request)}`);
 
@@ -67,6 +71,10 @@ export class SubscriptionController {
   @ApiResponse({ 
     status: 400, 
     description: 'OTP inválido o expirado'
+  })
+  @ApiResponse({ 
+    status: 429, 
+    description: 'Demasiadas operaciones de suscripción. Rate limit excedido.'
   })
   async validateSubscription(
     @Param('cuit') cuit: string,
@@ -98,6 +106,10 @@ export class SubscriptionController {
   @ApiResponse({ 
     status: 404, 
     description: 'Suscripción no encontrada'
+  })
+  @ApiResponse({ 
+    status: 429, 
+    description: 'Demasiadas operaciones de suscripción. Rate limit excedido.'
   })
   async resendSubscriptionChallenge(@Param('cuit') cuit: string): Promise<void> {
     this.logger.log(`Reenviando challenge para la suscripción con CUIT/CUIL: ${cuit}`);

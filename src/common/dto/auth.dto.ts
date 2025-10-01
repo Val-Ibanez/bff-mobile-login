@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsEmail, IsNotEmpty, IsOptional, IsString, IsUUID } from 'class-validator';
+import { IsEmail, IsNotEmpty, IsOptional, IsString, IsUUID, MinLength, MaxLength, Matches } from 'class-validator';
 
 export class CreateAccountRequestDto {
   @ApiProperty({ 
@@ -21,12 +21,19 @@ export class CreateAccountRequestDto {
   email: string;
 
   @ApiProperty({ 
-    description: 'Contraseña',
+    description: 'Contraseña (mínimo 12 caracteres, debe incluir mayúsculas, minúsculas, números y caracteres especiales)',
     example: 'MiPassword123!',
-    writeOnly: true
+    writeOnly: true,
+    minLength: 12,
+    maxLength: 128
   })
   @IsString()
   @IsNotEmpty()
+  @MinLength(12, { message: 'La contraseña debe tener al menos 12 caracteres' })
+  @MaxLength(128, { message: 'La contraseña no puede exceder 128 caracteres' })
+  @Matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]/, {
+    message: 'La contraseña debe contener al menos una letra minúscula, una mayúscula, un número y un carácter especial (@$!%*?&)'
+  })
   password: string;
 
   @ApiProperty({ 
@@ -66,12 +73,19 @@ export class AuthenticationRequestDto {
   email: string;
 
   @ApiProperty({ 
-    description: 'Contraseña',
+    description: 'Contraseña (mínimo 12 caracteres, debe incluir mayúsculas, minúsculas, números y caracteres especiales)',
     example: 'MiPassword123!',
-    writeOnly: true
+    writeOnly: true,
+    minLength: 12,
+    maxLength: 128
   })
   @IsString()
   @IsNotEmpty()
+  @MinLength(12, { message: 'La contraseña debe tener al menos 12 caracteres' })
+  @MaxLength(128, { message: 'La contraseña no puede exceder 128 caracteres' })
+  @Matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]/, {
+    message: 'La contraseña debe contener al menos una letra minúscula, una mayúscula, un número y un carácter especial (@$!%*?&)'
+  })
   password: string;
 
   @ApiProperty({ 

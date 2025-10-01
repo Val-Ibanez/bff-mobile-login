@@ -1,4 +1,4 @@
-import { Controller, Post, Body, HttpCode, HttpStatus, Logger } from '@nestjs/common';
+import { Controller, Post, Body, HttpCode, HttpStatus, Logger, UseGuards } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse, ApiBody } from '@nestjs/swagger';
 import { AuthService } from './auth.service';
 import { 
@@ -6,6 +6,7 @@ import {
   AuthenticationRequestDto, 
   AuthenticationResponseDto 
 } from '../common/dto/auth.dto';
+import { AuthRateLimitMiddleware } from '../common/middleware/auth-rate-limit.middleware';
 
 @ApiTags('auth')
 @Controller('v1/private')
@@ -45,6 +46,10 @@ export class AuthController {
     summary: 'Autenticación de comercio',
     description: 'Autentica un comercio y retorna tokens de acceso'
   })
+  @ApiResponse({ 
+    status: 429, 
+    description: 'Demasiados intentos de autenticación. Rate limit excedido.'
+  })
   @ApiBody({ type: AuthenticationRequestDto })
   @ApiResponse({ 
     status: 200, 
@@ -62,17 +67,7 @@ export class AuthController {
   async login(@Body() request: AuthenticationRequestDto): Promise<AuthenticationResponseDto> {
     this.logger.log(`Iniciando proceso de autenticación para el request: ${JSON.stringify({ email: request.email })}`);
     
-    // Respuesta mockeada para pruebas de frontend
-    // const mockResponse: AuthenticationResponseDto = {
-    //   accessToken: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c',
-    //   refreshToken: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.7eMe1dyoNm_S0Zh8n-dqRbkWgFKkKerem9iEJHFSqaY',
-    //   tokenType: 'Bearer',
-    //   expiresIn: 3600,
-    //   refreshExpiresIn: 86400
-    // };
-    
     this.logger.log(`[MOCK] Login exitoso para: ${request.email}`);
-    //return mockResponse;
     const response = await this.authService.login(request);
     return response;
   }

@@ -25,7 +25,6 @@ export const appConfig = (): AppConfig => ({
     timeout: parseInt(process.env.CLIENTS_SERVICE_TIMEOUT, 10) || 10000,
   },
   securityService: {
-    // Many security microservices expose private endpoints under /v1/private
     host: process.env.SECURITY_SERVICE_HOST || 'http://localhost:8087/v1/private',
     timeout: parseInt(process.env.SECURITY_SERVICE_TIMEOUT, 10) || 10000,
   },

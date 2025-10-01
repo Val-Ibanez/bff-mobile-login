@@ -16,11 +16,6 @@ export class AuthService {
   async createAccount(request: CreateAccountRequestDto): Promise<AuthenticationResponseDto> {
     this.logger.log(`Iniciando proceso de creación de cuenta para el email: ${request.email}`);
 
-    // Nota: En el BFF original, la validación de la key se hace contra una suscripción previamente validada
-    // Aquí asumimos que la key ya fue validada en el proceso de suscripción
-    // En un escenario real, podrías querer validar esto contra una base de datos o cache
-
-    // Crear la cuenta
     const account: Account = {
       cuit: request.cuit,
       email: request.email,
@@ -33,7 +28,6 @@ export class AuthService {
     const createdAccount = await this.securityService.createAccount(account);
     this.logger.log(`Cuenta creada exitosamente para el email: ${createdAccount.email}`);
 
-    // Realizar login automático
     const accountLogin = await this.performLogin(createdAccount);
 
     return this.mapToAuthenticationResponse(accountLogin);

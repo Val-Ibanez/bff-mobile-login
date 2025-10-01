@@ -22,20 +22,17 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
       throw new UnauthorizedException('No token provided');
     }
 
-    // Verificar si el token está en blacklist
     if (this.tokenBlacklistService.isBlacklisted(token)) {
       throw new UnauthorizedException('Token revoked');
     }
 
     try {
-      // Verificar estructura del token con validaciones robustas
       const decoded = jwt.verify(token, this.configService.get<string>('JWT_SECRET'), {
-        algorithms: ['HS256'], // Solo algoritmos permitidos
+        algorithms: ['HS256'],
         issuer: this.configService.get<string>('JWT_ISSUER', 'bff-mobile'),
         audience: this.configService.get<string>('JWT_AUDIENCE', 'mobile-app'),
       });
 
-      // Validar claims adicionales
       if (!decoded.sub || !(decoded as any).email) {
         throw new UnauthorizedException('Invalid token claims');
       }

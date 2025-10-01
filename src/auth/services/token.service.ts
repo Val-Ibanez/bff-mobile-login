@@ -68,7 +68,6 @@ export class TokenService {
 
   blacklistToken(token: string): void {
     this.blacklistedTokens.add(token);
-    // En producción, deberías usar Redis o una base de datos para almacenar tokens revocados
   }
 
   isTokenBlacklisted(token: string): boolean {
@@ -87,7 +86,6 @@ export class TokenService {
       email: payload.email,
     };
 
-    // Generar nuevo access token
     const accessToken = await this.generateAccessToken(user);
 
     return {
