@@ -109,3 +109,4 @@ El BFF se comunica con los siguientes microservicios:
 - **Axios** - Cliente HTTP
 - **Class Validator** - Validación de datos
 - **Swagger** - Documentación de API
+

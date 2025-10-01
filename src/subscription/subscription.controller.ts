@@ -1,6 +1,7 @@
-import { Controller, Post, Put, Patch, Body, Param, HttpCode, HttpStatus, Logger } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiResponse, ApiBody, ApiParam } from '@nestjs/swagger';
+import { Controller, Post, Put, Patch, Body, Param, HttpCode, HttpStatus, Logger, UseGuards } from '@nestjs/common';
+import { ApiTags, ApiOperation, ApiResponse, ApiBody, ApiParam, ApiBearerAuth } from '@nestjs/swagger';
 import { SubscriptionService } from './subscription.service';
+import { JwtAuthGuard } from '../auth/guards/jwt.guard';
 import { 
   CreateSubscriptionRequestDto, 
   CreateSubscriptionResponseDto,
@@ -10,6 +11,8 @@ import {
 
 @ApiTags('subscription')
 @Controller('v1/private/subscriptions')
+@UseGuards(JwtAuthGuard)
+@ApiBearerAuth('JWT-auth')
 export class SubscriptionController {
   private readonly logger = new Logger(SubscriptionController.name);
 
@@ -34,6 +37,10 @@ export class SubscriptionController {
   @ApiResponse({ 
     status: 400, 
     description: 'Datos de entrada inválidos'
+  })
+  @ApiResponse({ 
+    status: 429, 
+    description: 'Demasiadas operaciones de suscripción. Rate limit excedido.'
   })
   async createSubscription(@Body() request: CreateSubscriptionRequestDto): Promise<CreateSubscriptionResponseDto> {
     this.logger.log(`Generando suscripción para el cliente: ${JSON.stringify(request)}`);
@@ -64,6 +71,10 @@ export class SubscriptionController {
   @ApiResponse({ 
     status: 400, 
     description: 'OTP inválido o expirado'
+  })
+  @ApiResponse({ 
+    status: 429, 
+    description: 'Demasiadas operaciones de suscripción. Rate limit excedido.'
   })
   async validateSubscription(
     @Param('cuit') cuit: string,
@@ -96,6 +107,10 @@ export class SubscriptionController {
     status: 404, 
     description: 'Suscripción no encontrada'
   })
+  @ApiResponse({ 
+    status: 429, 
+    description: 'Demasiadas operaciones de suscripción. Rate limit excedido.'
+  })
   async resendSubscriptionChallenge(@Param('cuit') cuit: string): Promise<void> {
     this.logger.log(`Reenviando challenge para la suscripción con CUIT/CUIL: ${cuit}`);
     
@@ -104,3 +119,4 @@ export class SubscriptionController {
     this.logger.log(`Finaliza reenvío de challenge para la suscripción con CUIT/CUIL: ${cuit}`);
   }
 }
+

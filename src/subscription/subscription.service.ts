@@ -20,7 +20,6 @@ export class SubscriptionService {
   async createSubscription(request: CreateSubscriptionRequestDto): Promise<CreateSubscriptionResponseDto> {
     this.logger.log(`Generando suscripción para el cliente: ${JSON.stringify(request)}`);
 
-    // Verificar si ya existe un comercio para este CUIT
     const existingMerchant = await this.merchantsService.findByCuit(request.cuit);
     if (existingMerchant) {
       this.logger.warn(`El CUIT/CUIL ${request.cuit} ya tiene una cuenta creada`);
@@ -29,7 +28,6 @@ export class SubscriptionService {
 
     this.logger.log(`CUIT/CUIL: ${request.cuit} no tiene un comercio creado, se envía a crear una suscripción en ms-clients`);
     
-    // Crear suscripción
     const subscription = await this.clientsService.createSubscription(request.cuit);
     
     this.logger.log(`Suscripción creada exitosamente para el CUIT/CUIL: ${request.cuit}`);
@@ -60,3 +58,4 @@ export class SubscriptionService {
     this.logger.log(`Finaliza reenvío de challenge para la suscripción con CUIT/CUIL: ${cuit}`);
   }
 }
+

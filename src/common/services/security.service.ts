@@ -24,7 +24,6 @@ export class SecurityService {
       },
     });
     
-    // Agregar interceptores para logging
     this.httpClient.interceptors.request.use((config) => {
       this.logger.log(`[DEBUG] Enviando petición a: ${config.method.toUpperCase()} ${config.baseURL}${config.url}`);
       return config;
@@ -86,12 +85,10 @@ export class SecurityService {
       
       const response = await this.httpClient.post('/login', requestBody);
       
-      // Aceptar 200 OK o 201 Created según cómo responda el microservicio
       if ((response.status === 200 || response.status === 201) && response.data) {
         this.logger.log(`Login exitoso para email: ${email}`);
 
-        // Normalizar campos: algunos microservicios responden en snake_case
-  const data = response.data;
+        const data = response.data;
         const accountLogin: AccountLogin = {
           accessToken: data.accessToken || data.access_token,
           refreshToken: data.refreshToken || data.refresh_token,
@@ -105,9 +102,7 @@ export class SecurityService {
 
       throw new Error('Error al realizar login: respuesta inválida');
     } catch (error: any) {
-      // Mejor depuración para errores de Axios
       if (error.response) {
-        // El microservicio respondió con un código de error
         this.logger.error(
           `Login falló para email ${email}: status=${error.response.status}, data=${JSON.stringify(error.response.data)}`,
         );
@@ -117,9 +112,9 @@ export class SecurityService {
         );
       }
 
-      // Otros errores (timeout, network, etc.)
       this.logger.error(`Error al realizar login para email ${email}: ${error.message}`);
       throw new HttpException(`Error al realizar login: ${error.message}`, HttpStatus.BAD_GATEWAY);
     }
   }
 }
+
