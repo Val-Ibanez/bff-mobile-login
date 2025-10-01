@@ -1,6 +1,6 @@
-# BFF Mobile Login API
+# BFF Mobile
 
-Backend for Frontend (BFF) API para servicios de login móvil, desarrollado en Node.js con NestJS.## Estructura del Proyecto
+Backend for Frontend (BFF) API para servicios mobile, desarrollado en Node.js con NestJS.## Estructura del Proyecto
 
 ```
 src/
